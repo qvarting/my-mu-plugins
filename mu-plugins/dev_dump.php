@@ -1,17 +1,17 @@
 <?php
 /**
- * Plugin Name: Dev Dump
- * Description: Simple readable debug dump helper.
+ * Plugin Name: Dev Dump Toolkit
+ * Description: dump_var(), r_print(), and dd() helpers for development.
  * Author: Martin Stoll
- * Version: 0.1.0
+ * Version: 0.2.0
  */
 
 defined('ABSPATH') || exit;
 
 /**
- * Determines if dumping is allowed.
+ * Check if dumping is allowed.
  */
-function dump_var_enabled(): bool {
+function dev_dump_enabled(): bool {
 
     if ( ! current_user_can('administrator') ) {
         return false;
@@ -29,18 +29,15 @@ function dump_var_enabled(): bool {
 }
 
 /**
- * Pretty dump wrapper for var_dump().
- *
- * @param mixed  $var
- * @param string $label Optional label
+ * Internal renderer.
  */
-function dump_var( $var, string $label = '' ): void {
-
-    if ( ! dump_var_enabled() ) {
-        return;
-    }
+function dev_dump_render( string $output, string $label = '' ): void {
 
     static $style_printed = false;
+
+    if ( ! dev_dump_enabled() ) {
+        return;
+    }
 
     if ( ! $style_printed ) {
         echo '<style>
@@ -51,7 +48,7 @@ function dump_var( $var, string $label = '' ): void {
                 margin:16px 0;
                 border-radius:8px;
                 font-size:13px;
-                line-height:1.4;
+                line-height:1.5;
                 overflow:auto;
                 box-shadow:0 4px 12px rgba(0,0,0,0.2);
             }
@@ -72,8 +69,38 @@ function dump_var( $var, string $label = '' ): void {
     }
 
     echo '<pre>';
-    var_dump($var);
+    echo $output;
     echo '</pre>';
 
     echo '</div>';
+}
+
+/**
+ * dump_var() – wrapper for var_dump()
+ */
+function dump_var( $var, string $label = '' ): void {
+
+    ob_start();
+    var_dump($var);
+    $output = ob_get_clean();
+
+    dev_dump_render($output, $label);
+}
+
+/**
+ * r_print() – wrapper for print_r()
+ */
+function r_print( $var, string $label = '' ): void {
+
+    $output = print_r($var, true);
+    dev_dump_render($output, $label);
+}
+
+/**
+ * dd() – dump and die
+ */
+function dd( $var, string $label = '' ): void {
+
+    dump_var($var, $label);
+    die();
 }
