@@ -4,14 +4,16 @@ A small collection of personal MU-plugins for WordPress.
 
 ## Samples
 
-- **QMD** (`mu-plugins/qmd.php`)  
-  Lightweight helper functions for logging data to **Query Monitor** using the
-  `qm/debug` hook.
-  `qmd('åderpåle123');`
-
-
 ```php
+// query monitor debug
+qmd('åderpåle123');
+
+// var_dump wrapper
 dump_var( $user );
+
+// print_r wrapper
 r_print( $query, 'Main Query' );
+
+// dump & die
 dd( $post );
 ```
