@@ -16,4 +16,8 @@ r_print( $query, 'Main Query' );
 
 // dump & die
 dd( $post );
+
+// include filepath
+[include filepath="partials/hero.php"]
+[include filepath="partials/hero.php?title=Hello&cta=Buy"]
 ```
