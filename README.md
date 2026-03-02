@@ -20,4 +20,9 @@ dd( $post );
 // include filepath
 [include filepath="partials/hero.php"]
 [include filepath="partials/hero.php?title=Hello&cta=Buy"]
+
+// simple history logs
+sh_log('Import started');
+sh_log('Import failed', 'Could not parse CSV', 'error');
+sh_log('Debug payload', null, 'debug', ['id' => 123, 'status' => 'ok']);
 ```
